@@ -1,9 +1,8 @@
-class NoteMenu(private val archiveName: String, private val archiveNotes: MutableList<Pair<String, String>>) : Menu("---Заметки в архиве '$archiveName'---") {
+class NoteMenu(private val archiveName: String, val archiveNotes: MutableList<Pair<String, String>>) : Menu("---Заметки в архиве '$archiveName'---") {
 
     init {
         addOption("Создать заметку", ::createNote)
-        addOption("Выбрать заметку", ::selectNote)
-        addOption("Посмотреть все заметки", ::listNote)
+        addOption("Список заметок", ::showNotesList)
         addOption("Назад", ::back)
     }
 
@@ -23,25 +22,12 @@ class NoteMenu(private val archiveName: String, private val archiveNotes: Mutabl
         }
     }
 
-    private fun selectNote(){
-        val noteTitle = readInput("Введите название заметки: ")
-        val selectedNote = archiveNotes.find { it.first == noteTitle }
-
-        if (selectedNote != null){
-            println("Выбрана заметка '${selectedNote.first}' в архиве '$archiveName' \nСодержание: '${selectedNote.second}'")
-        } else {
-            println("Заметка с названием '$noteTitle' не найдена!!!")
-        }
-    }
-
-    private fun listNote(){
-        if (archiveNotes.isEmpty()){
+    private fun showNotesList() {
+        if (archiveNotes.isEmpty()) {
             println("В архиве '$archiveName' нет заметок!!!")
         } else {
-            println("Список заметок в архиве '$archiveName': ")
-            for ((index, note) in archiveNotes.withIndex()){
-                println("${index + 1}. Название: ${note.first}")
-            }
+            val notesListMenu = NotesListMenu(this)
+            notesListMenu.execute()
         }
     }
 

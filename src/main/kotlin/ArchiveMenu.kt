@@ -1,10 +1,9 @@
 class ArchiveMenu : Menu("-----Архивы-----") {
-    private val archives = mutableMapOf<String, MutableList<Pair<String, String>>>()
+    val archives = mutableMapOf<String, MutableList<Pair<String, String>>>()
 
     init {
         addOption("Добавить архив", ::addArchive)
-        addOption("Список архивов", ::listArchives)
-        addOption("Выбрать архив", ::selectArchive)
+        addOption("Показать список архивов", ::showArchivesList)
         addOption("Выход", ::exitArchive)
     }
 
@@ -20,35 +19,16 @@ class ArchiveMenu : Menu("-----Архивы-----") {
         }
     }
 
-    private fun listArchives(){
-        if (archives.isEmpty()){
+    private fun showArchivesList() {
+        if (archives.isEmpty()) {
             println("Нет доступных архивов!!!")
         } else {
-            println("Доступные архивы: ")
-            for (archive in archives.keys){
-                println(archive)
-            }
-        }
-    }
-
-    private fun selectArchive(){
-        if (archives.isEmpty()){
-            println("Нет доступных архивов!!!")
-        } else {
-            val selectedArchive = readInput("Выберете архив для работы: ")
-            selectedArchive.let {
-                if (archives.containsKey(it)){
-                    val noteMenu = NoteMenu(it, archives[it]!!)
-                    noteMenu.execute()
-                } else {
-                    println("Выбранный архив '$it' не существует.")
-                }
-            }
+            val archivesListMenu = ArchivesListMenu(this)
+            archivesListMenu.execute()
         }
     }
 
     private fun exitArchive(){
         exit()
     }
-
 }
